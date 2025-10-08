@@ -15,6 +15,12 @@ import com.labgeek.moviesapi.services.MovieService;
 @Produces(MediaType.APPLICATION_JSON)
 public class MovieResource {
 
+    private final MovieService movieService;
+
+    public MovieResource(MovieService movieService) {
+        this.movieService = movieService;
+        }
+    
     @GET
     public Response getAllMovies() {
 		try {
