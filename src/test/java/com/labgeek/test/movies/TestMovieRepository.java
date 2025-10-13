@@ -10,6 +10,8 @@ import static org.mockito.Mockito.when;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -21,61 +23,91 @@ import com.labgeek.moviesapi.repository.MovieRepository;
 
 class TestMovieRepository {
 
-    private DataBaseConnection mockDb;
-    private Connection mockConnection;
-    private PreparedStatement mockStatement;
-    private ResultSet mockResultSet;
+	private DataBaseConnection mockDb;
+	private Connection mockConnection;
+	private PreparedStatement mockStatement;
+	private ResultSet mockResultSet;
 
-    private MovieRepository repository;
+	private MovieRepository repository;
 
-    @BeforeEach
-    void setUp() throws Exception {
-        mockDb = mock(DataBaseConnection.class);
-        mockConnection = mock(Connection.class);
-        mockStatement = mock(PreparedStatement.class);
-        mockResultSet = mock(ResultSet.class);
+	@BeforeEach
+	void setUp() throws Exception {
+		mockDb = mock(DataBaseConnection.class);
+		mockConnection = mock(Connection.class);
+		mockStatement = mock(PreparedStatement.class);
+		mockResultSet = mock(ResultSet.class);
 
-        when(mockDb.getConnection()).thenReturn(mockConnection);
-        when(mockConnection.prepareStatement("SELECT * FROM movies")).thenReturn(mockStatement);
-        when(mockStatement.executeQuery()).thenReturn(mockResultSet);
+		when(mockDb.getConnection()).thenReturn(mockConnection);
 
-        repository = new MovieRepository(mockDb);
-    }
+		repository = new MovieRepository(mockDb);
+	}
 
-    @Test
-    void testFindAllReturnsMovies() throws Exception {
-        // Mock ResultSet
-        when(mockResultSet.next()).thenReturn(true, false); // one row only
-        when(mockResultSet.getInt("id")).thenReturn(1);
-        when(mockResultSet.getString("title")).thenReturn("Inception");
-        when(mockResultSet.getString("director")).thenReturn("Christopher Nolan");
-        when(mockResultSet.getString("genre")).thenReturn("Sci-Fi");
+	@Test
+	void testFindAllReturnsMovies() throws Exception {
+		when(mockConnection.prepareStatement("SELECT * FROM movies")).thenReturn(mockStatement);
+		when(mockStatement.executeQuery()).thenReturn(mockResultSet);
+		// Mock ResultSet
+		when(mockResultSet.next()).thenReturn(true, false); // one row only
+		when(mockResultSet.getInt("id")).thenReturn(1);
+		when(mockResultSet.getString("title")).thenReturn("Inception");
+		when(mockResultSet.getString("director")).thenReturn("Christopher Nolan");
+		when(mockResultSet.getString("genre")).thenReturn("Sci-Fi");
 
-        List<Movie> movies = repository.findAll();
+		List<Movie> movies = repository.findAll();
 
-        assertNotNull(movies);
-        assertEquals(1, movies.size());
-        assertEquals("Inception", movies.get(0).getTitle());
-        assertEquals("Christopher Nolan", movies.get(0).getDirector());
-        assertEquals("Sci-Fi", movies.get(0).getGenre());
-    }
+		assertNotNull(movies);
+		assertEquals(1, movies.size());
+		assertEquals("Inception", movies.get(0).getTitle());
+		assertEquals("Christopher Nolan", movies.get(0).getDirector());
+		assertEquals("Sci-Fi", movies.get(0).getGenre());
+	}
 
-    @Test
-    void testFindAllEmptyResult() throws Exception {
-        when(mockResultSet.next()).thenReturn(false);
+	@Test
+	void testFindAllEmptyResult() throws Exception {
+		when(mockConnection.prepareStatement("SELECT * FROM movies")).thenReturn(mockStatement);
+		when(mockStatement.executeQuery()).thenReturn(mockResultSet);
+		when(mockResultSet.next()).thenReturn(false);
 
-        List<Movie> movies = repository.findAll();
+		List<Movie> movies = repository.findAll();
 
-        assertNotNull(movies);
-        assertTrue(movies.isEmpty());
-    }
+		assertNotNull(movies);
+		assertTrue(movies.isEmpty());
+	}
 
-    @Test
-    void testFindAllThrowsException() throws Exception {
-        when(mockConnection.prepareStatement("SELECT * FROM movies"))
-                .thenThrow(new RuntimeException("DB error"));
+	@Test
+	void testFindAllThrowsException() throws Exception {
 
-        RuntimeException ex = assertThrows(RuntimeException.class, () -> repository.findAll());
-        assertTrue(ex.getMessage().contains("DB error"));
-    }
+		when(mockConnection.prepareStatement("SELECT * FROM movies")).thenThrow(new RuntimeException("DB error"));
+
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> repository.findAll());
+		assertTrue(ex.getMessage().contains("DB error"));
+	}
+
+	@Test
+	void testCreateMovie() throws SQLException {
+		when(mockConnection.prepareStatement("Insert into movies(title,director,year,genre) values (?,?,?,?)",
+				Statement.RETURN_GENERATED_KEYS)).thenReturn(mockStatement);
+		 when(mockStatement.executeUpdate()).thenReturn(1);
+
+	        // --- Step 4: Stub getGeneratedKeys to return mockResultSet ---
+	        when(mockStatement.getGeneratedKeys()).thenReturn(mockResultSet);
+
+	        // --- Step 5: Stub resultSet.next() and getInt(1) ---
+	        when(mockResultSet.next()).thenReturn(true);  // first call returns true
+	        when(mockResultSet.getInt(1)).thenReturn(42); // generated ID
+
+	        MovieRepository repo = new MovieRepository(mockDb); // adapt your constructor
+	        Movie movie = new Movie();
+	        movie.setTitle("Inception");
+	        movie.setDirector("Nolan");
+	        movie.setYear("2010");
+	        movie.setGenre("Sci-Fi");
+
+	        Movie saved = repo.create(movie);
+
+	        assertNotNull(saved);
+	        assertEquals(42, saved.getId());  
+	        assertEquals("Inception", saved.getTitle());
+
+	}
 }

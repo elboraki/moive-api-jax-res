@@ -66,5 +66,19 @@ class TestMovieService {
 	        RuntimeException ex = assertThrows(RuntimeException.class, () -> service.getAllMovies());
 	        assertEquals("DB error", ex.getMessage());
 	    }
+	    
+	    @Test
+	    void testCreateMovie() {
+	    	 Movie movie = new Movie();
+	         movie.setTitle("Inception");
+	         movie.setDirector("Nolan");
+	         movie.setYear("2010");
+	         movie.setGenre("Sci-Fi");
+	        when(movieRepositoryMock.create(movie)).thenReturn(movie);
+	        
+	        assertEquals("2010", movie.getYear());
+
+	        
+	    }
 
 }

@@ -54,4 +54,9 @@ public class MovieResource {
             return Response.serverError().entity("Database failed").build();
         }
     }
+
+	public Response CreateMovies() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
