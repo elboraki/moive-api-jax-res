@@ -15,4 +15,10 @@ public class MovieService {
 	public List<Movie> getAllMovies(){
 		return this.movieRepository.findAll();
 	}
+	
+	public Movie createMovie(Movie movie){
+
+		return this.movieRepository.create(movie);
+	
+	}
 }

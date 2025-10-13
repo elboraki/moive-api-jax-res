@@ -1,6 +1,7 @@
 package com.labgeek.test.movies;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ class TestMoiveModel {
 	 assertEquals("Titanic", movie.getTitle());
 	 assertNotNull(movie);
 	}
-	
+
 	@Test
 	void testDramaMovie() {
 	 assertEquals("Drama", movie.getGenre());

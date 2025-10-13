@@ -1,6 +1,9 @@
 package com.labgeek.test.movies;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -30,7 +33,7 @@ class TestMovieService {
 		m1.setId(1);
 		m1.setTitle("Titanic");
 		m1.setGenre("Drama");
-		
+
 		m2=new Movie();
 		m2.setId(1);
 		m2.setTitle("Matrix");
@@ -43,9 +46,9 @@ class TestMovieService {
 		List<Movie> movieList=service.getAllMovies();
 		assertEquals(2,movieList.size());
 		assertEquals("Matrix",movieList.get(1).getTitle());
-	
+
 	}
-	
+
 	 @Test
 	    void testGetAllMoviesReturnsEmptyList() {
 	        when(movieRepositoryMock.findAll()).thenReturn(Collections.emptyList());

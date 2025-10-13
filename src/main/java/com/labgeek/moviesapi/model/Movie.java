@@ -6,6 +6,8 @@ public class Movie {
 	private String title;
 	private String director;
 	private String genre;
+	private String Year;
+
 
 	public Movie() {
 	}
@@ -40,6 +42,14 @@ public class Movie {
 
 	public void setGenre(String genre) {
 		this.genre = genre;
+	}
+
+	public String getYear() {
+		return Year;
+	}
+
+	public void setYear(String year) {
+		Year = year;
 	}
 
 }
