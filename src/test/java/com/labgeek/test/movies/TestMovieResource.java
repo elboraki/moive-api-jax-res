@@ -5,13 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
+import static org.mockito.Mockito.*;
 import java.util.Arrays;
 import java.util.Collections;
 
 import javax.ws.rs.core.Response;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import com.labgeek.moviesapi.config.DataBaseConnection;
 import com.labgeek.moviesapi.model.Movie;
@@ -90,41 +91,64 @@ class MovieResourceTest {
 		assertEquals(200, response.getStatus());
 		assertTrue(((java.util.List<?>) response.getEntity()).isEmpty());
 	}
-	
+
 	@Test
 	void testPostMovie() throws Exception {
-				Movie movie = new Movie();
-				movie.setId(1);
-				movie.setTitle("Matrix");
-				movie.setDirector("Zeus");
-				movie.setGenre("SC Fiction");
+		Movie movie = new Movie();
+		movie.setId(1);
+		movie.setTitle("Matrix");
+		movie.setDirector("Zeus");
+		movie.setGenre("SC Fiction");
 		MovieService mockService = mock(MovieService.class);
 		when(mockService.createMovie(movie)).thenReturn(movie);
 
 		MovieResource resource = new MovieResource();
-		
 
 		Response response = resource.createMovies(movie);
 
 		assertEquals(201, response.getStatus());
-		assertEquals(response.getEntity(),movie);
+		assertEquals(response.getEntity(), movie);
 	}
-	
+
 	@Test
 	void testUpdateMovieById() throws Exception {
-				Movie movie = new Movie();
-				movie.setId(1);
-				movie.setTitle("Matrix");
-				movie.setDirector("Zeus");
-				movie.setGenre("SC Fiction");
+		Movie movie = new Movie();
+		movie.setId(1);
+		movie.setTitle("Matrix");
+		movie.setDirector("Zeus");
+		movie.setGenre("SC Fiction");
 		MovieService mockService = mock(MovieService.class);
-		when(mockService.updateMovie(movie,1)).thenReturn(movie);
+		when(mockService.updateMovie(movie, 1)).thenReturn(movie);
 
 		MovieResource resource = new MovieResource();
-		
 
-		Response response = resource.updateMovies(1,movie);
+		Response response = resource.updateMovies(1, movie);
 
 		assertEquals(200, response.getStatus());
+	}
+
+	@Test
+	void testDeleteMovieSucess() throws Exception {
+		MovieService mockService = mock(MovieService.class);
+		MovieResource MockResource = Mockito.spy(new MovieResource(mockService));
+
+		doReturn(true).when(mockService).deleteMovie(1);
+
+		Response response = MockResource.deleteMovies(1);
+
+		assertNotNull(response.getStatus());
+	}
+
+	@Test
+	void testDeleteMovieNotFound() throws Exception {
+
+		MovieService mockService = mock(MovieService.class);
+		when(mockService.deleteMovie(1)).thenReturn(false);
+
+		MovieResource MockResource = new MovieResource(mockService);
+
+		Response response = MockResource.deleteMovies(1);
+
+		assertEquals(404, response.getStatus());
 	}
 }

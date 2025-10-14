@@ -26,4 +26,10 @@ public class MovieService {
 		return this.movieRepository.update(movie, id);
 	
 	}
+	
+	public boolean deleteMovie(int id){
+
+		return this.movieRepository.delete(id);
+	
+	}
 }

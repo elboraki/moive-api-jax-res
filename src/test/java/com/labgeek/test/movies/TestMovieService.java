@@ -95,5 +95,16 @@ class TestMovieService {
 
 	        
 	    }
+	    
+	    @Test
+	    void testDeleteMovie() {
+
+	        when(movieRepositoryMock.delete(1)).thenReturn(true);
+	        boolean isDeletedMovie=movieRepositoryMock.delete(1);
+	        assertEquals(true,isDeletedMovie);
+
+	        
+	    }
+
 
 }

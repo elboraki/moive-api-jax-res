@@ -101,4 +101,23 @@ public class MovieRepository {
 			throw new RuntimeException("Updating movie has been failed", e);
 		}
 	}
+	
+	
+	public boolean delete(int id) {
+		String query = "DELETE FROM movies WHERE id=?";
+		try {
+			PreparedStatement ps = this.db.getConnection().prepareStatement(query);
+			ps.setInt(1, id);
+
+			int row = ps.executeUpdate();
+			if (row >0) {
+				return true;
+			}
+
+
+		} catch (SQLException e) {
+			throw new RuntimeException("deleting movie has been failed", e);
+		}
+		return false;
+	}
 }

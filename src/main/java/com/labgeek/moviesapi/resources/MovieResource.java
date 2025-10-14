@@ -3,6 +3,7 @@ package com.labgeek.moviesapi.resources;
 import java.sql.SQLException;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -22,9 +23,18 @@ import com.labgeek.moviesapi.services.MovieService;
 @Consumes(MediaType.APPLICATION_JSON)
 
 public class MovieResource {
+    private MovieService movieService;
+    
+    public MovieResource() {
+		this.movieService=null;
+	}
 
 
-    @GET
+    public MovieResource(MovieService movieService) {
+		this.movieService=movieService;
+	}
+
+	@GET
     public Response getAllMovies() {
         try {
             DataBaseConnection db = DataBaseConnection.getInstance();
@@ -71,6 +81,31 @@ public class MovieResource {
             return Response.serverError().entity("Database failed").build();
         }
     }
+    @DELETE
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteMovies(@PathParam("id") int id) {
+        try {
+            DataBaseConnection db = DataBaseConnection.getInstance();
+            MovieRepository movieRepo = new MovieRepository(db);
+            this.movieService = new MovieService(movieRepo);
+          
+            boolean moviedeleted = this.movieService.deleteMovie(id);
+            if(moviedeleted==true) {
+            	
+            	return Response.status(Response.Status.OK)
+            			.entity("{\"Message\":\"Success! the movie has been deleted\"}")
+            			.build();
+            }else {
+               	return Response.status(Response.Status.NOT_FOUND)
+            			.entity("{\"Message\":\"Movie not found\"}")
+            			.build();
+            }
 
+        } catch (SQLException e) {
+            return Response.serverError().entity("Database failed").build();
+        }
+    }
 
 }
