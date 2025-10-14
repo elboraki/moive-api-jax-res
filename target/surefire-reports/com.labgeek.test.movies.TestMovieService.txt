@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.labgeek.test.movies.TestMovieService
 -------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.654 s -- in com.labgeek.test.movies.TestMovieService
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.535 s -- in com.labgeek.test.movies.TestMovieService

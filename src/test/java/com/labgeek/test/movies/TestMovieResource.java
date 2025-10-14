@@ -93,7 +93,6 @@ class MovieResourceTest {
 	
 	@Test
 	void testPostMovie() throws Exception {
-		// Fake movie
 				Movie movie = new Movie();
 				movie.setId(1);
 				movie.setTitle("Matrix");
@@ -102,19 +101,30 @@ class MovieResourceTest {
 		MovieService mockService = mock(MovieService.class);
 		when(mockService.createMovie(movie)).thenReturn(movie);
 
-		MovieResource resource = new MovieResource() {
-			@Override
-			public Response CreateMovies() {
-				return Response.status(Response.Status.CREATED)
-	                    .entity(movie)
-	                    .build();
+		MovieResource resource = new MovieResource();
+		
 
-			}
-		};
-
-		Response response = resource.CreateMovies();
+		Response response = resource.createMovies(movie);
 
 		assertEquals(201, response.getStatus());
 		assertEquals(response.getEntity(),movie);
+	}
+	
+	@Test
+	void testUpdateMovieById() throws Exception {
+				Movie movie = new Movie();
+				movie.setId(1);
+				movie.setTitle("Matrix");
+				movie.setDirector("Zeus");
+				movie.setGenre("SC Fiction");
+		MovieService mockService = mock(MovieService.class);
+		when(mockService.updateMovie(movie,1)).thenReturn(movie);
+
+		MovieResource resource = new MovieResource();
+		
+
+		Response response = resource.updateMovies(1,movie);
+
+		assertEquals(200, response.getStatus());
 	}
 }

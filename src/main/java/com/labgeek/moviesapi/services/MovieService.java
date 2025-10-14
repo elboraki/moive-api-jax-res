@@ -21,4 +21,9 @@ public class MovieService {
 		return this.movieRepository.create(movie);
 	
 	}
+	public Movie updateMovie(Movie movie,int id){
+
+		return this.movieRepository.update(movie, id);
+	
+	}
 }

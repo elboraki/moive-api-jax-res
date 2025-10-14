@@ -110,4 +110,32 @@ class TestMovieRepository {
 	        assertEquals("Inception", saved.getTitle());
 
 	}
+	
+	@Test
+	void testUpdateMovie() throws SQLException {
+		when(mockConnection.prepareStatement("UPDATE movies SET title=?,director=?,year=?,genre=? WHERE id=?")).thenReturn(mockStatement);
+	
+		when(mockStatement.executeUpdate()).thenReturn(1);
+
+	      
+		when(mockConnection.prepareStatement("SELECT * FROM movies where id=?")).thenReturn(mockStatement);
+		
+		when(mockStatement.executeQuery()).thenReturn(mockResultSet);
+		when(mockResultSet.next()).thenReturn(true); 
+        when(mockResultSet.getInt("id")).thenReturn(1); 
+        when(mockResultSet.getString("title")).thenReturn("Inception"); 
+
+	        MovieRepository repo = new MovieRepository(mockDb); 
+	        Movie movie = new Movie();
+	        movie.setId(mockResultSet.getInt(1));
+	        movie.setTitle(mockResultSet.getString("title"));
+
+
+	        Movie updatedMovie = repo.update(movie,1);
+
+	        assertNotNull(updatedMovie);
+	        assertEquals(1, updatedMovie.getId());  
+	        assertEquals("Inception", updatedMovie.getTitle());
+
+	}
 }

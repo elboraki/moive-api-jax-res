@@ -80,5 +80,20 @@ class TestMovieService {
 
 	        
 	    }
+	    
+	    @Test
+	    void testUpdateMovie() {
+	    	 Movie movie = new Movie();
+	    	 movie.setId(1);
+	         movie.setTitle("Inception");
+	         movie.setDirector("Nolan");
+	         movie.setYear("2010");
+	         movie.setGenre("Sci-Fi");
+	        when(movieRepositoryMock.update(movie,1)).thenReturn(movie);
+	        
+	        assertEquals("2010", movie.getYear());
+
+	        
+	    }
 
 }

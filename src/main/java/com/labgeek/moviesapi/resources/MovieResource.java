@@ -5,7 +5,9 @@ import java.sql.SQLException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -21,10 +23,6 @@ import com.labgeek.moviesapi.services.MovieService;
 
 public class MovieResource {
 
-    // ✅ Add this no-arg constructor
-    public MovieResource() {
-        // Jersey needs this to create an instance
-    }
 
     @GET
     public Response getAllMovies() {
@@ -39,7 +37,7 @@ public class MovieResource {
     }
     
     @POST
-    public Response CreateMovies(Movie movie) {
+    public Response createMovies(Movie movie) {
         try {
             DataBaseConnection db = DataBaseConnection.getInstance();
             MovieRepository movieRepo = new MovieRepository(db);
@@ -54,9 +52,25 @@ public class MovieResource {
             return Response.serverError().entity("Database failed").build();
         }
     }
+    @PUT
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateMovies(@PathParam("id") int id,Movie movie) {
+        try {
+            DataBaseConnection db = DataBaseConnection.getInstance();
+            MovieRepository movieRepo = new MovieRepository(db);
+            MovieService service = new MovieService(movieRepo);
+          
+            Movie movieUpdate = service.updateMovie(movie,id);
+            return Response.status(Response.Status.OK)
+                    .entity(movieUpdate)
+                    .build();
 
-	public Response CreateMovies() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        } catch (SQLException e) {
+            return Response.serverError().entity("Database failed").build();
+        }
+    }
+
+
 }
