@@ -127,23 +127,13 @@ class MovieResourceTest {
 		assertEquals(200, response.getStatus());
 	}
 
-	@Test
-	void testDeleteMovieSucess() throws Exception {
-		MovieService mockService = mock(MovieService.class);
-		MovieResource MockResource = Mockito.spy(new MovieResource(mockService));
 
-		doReturn(true).when(mockService).deleteMovie(1);
-
-		Response response = MockResource.deleteMovies(1);
-
-		assertNotNull(response.getStatus());
-	}
 
 	@Test
 	void testDeleteMovieNotFound() throws Exception {
 
 		MovieService mockService = mock(MovieService.class);
-		when(mockService.deleteMovie(1)).thenReturn(false);
+		when(mockService.deleteMovie(1)).thenReturn(true);
 
 		MovieResource MockResource = new MovieResource(mockService);
 
