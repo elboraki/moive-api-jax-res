@@ -1,6 +1,0 @@
-com/labgeek/moviesapi/services/MovieService.class
-com/labgeek/moviesapi/resources/MovieResource.class
-com/labgeek/moviesapi/config/JerseyConfig.class
-com/labgeek/moviesapi/repository/MovieRepository.class
-com/labgeek/moviesapi/config/DataBaseConnection.class
-com/labgeek/moviesapi/model/Movie.class

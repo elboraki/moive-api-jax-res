@@ -1,6 +1,0 @@
-/home/younes/eclipse-workspace/movies-api/src/main/java/com/labgeek/moviesapi/config/DataBaseConnection.java
-/home/younes/eclipse-workspace/movies-api/src/main/java/com/labgeek/moviesapi/config/JerseyConfig.java
-/home/younes/eclipse-workspace/movies-api/src/main/java/com/labgeek/moviesapi/model/Movie.java
-/home/younes/eclipse-workspace/movies-api/src/main/java/com/labgeek/moviesapi/repository/MovieRepository.java
-/home/younes/eclipse-workspace/movies-api/src/main/java/com/labgeek/moviesapi/resources/MovieResource.java
-/home/younes/eclipse-workspace/movies-api/src/main/java/com/labgeek/moviesapi/services/MovieService.java
