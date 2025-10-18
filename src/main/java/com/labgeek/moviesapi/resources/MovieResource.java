@@ -17,6 +17,7 @@ import javax.ws.rs.core.Response;
 import com.labgeek.moviesapi.config.DataBaseConnection;
 import com.labgeek.moviesapi.model.Movie;
 import com.labgeek.moviesapi.repository.MovieRepository;
+import com.labgeek.moviesapi.security.Secured;
 import com.labgeek.moviesapi.services.MovieService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,6 +25,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @Path("/movies")
+@Secured
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Tag(name = "Movies", description = "API for managing movies")

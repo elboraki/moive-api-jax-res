@@ -18,5 +18,6 @@ public class JerseyConfig extends ResourceConfig {
     public JerseyConfig() {
         packages("com.labgeek.moviesapi.resources");
         register(OpenApiResource.class);
+        register(com.labgeek.moviesapi.security.JwtFilter.class);
     }
 }
