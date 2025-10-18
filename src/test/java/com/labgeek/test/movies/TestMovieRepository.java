@@ -61,6 +61,25 @@ class TestMovieRepository {
 		assertEquals("Christopher Nolan", movies.get(0).getDirector());
 		assertEquals("Sci-Fi", movies.get(0).getGenre());
 	}
+	
+	@Test
+	void testFindByIdReturnsMovies() throws Exception {
+		when(mockConnection.prepareStatement("SELECT * FROM movies where id=?")).thenReturn(mockStatement);
+		when(mockStatement.executeQuery()).thenReturn(mockResultSet);
+		// Mock ResultSet
+		when(mockResultSet.next()).thenReturn(true); // one row only
+		when(mockResultSet.getInt("id")).thenReturn(1);
+		when(mockResultSet.getString("title")).thenReturn("Inception");
+		when(mockResultSet.getString("director")).thenReturn("Christopher Nolan");
+		when(mockResultSet.getString("genre")).thenReturn("Sci-Fi");
+
+		Movie movie = repository.findById(1);
+
+		assertNotNull(movie);
+		assertEquals("Inception", movie.getTitle());
+		assertEquals("Christopher Nolan", movie.getDirector());
+		assertEquals("Sci-Fi", movie.getGenre());
+	}
 
 	@Test
 	void testFindAllEmptyResult() throws Exception {

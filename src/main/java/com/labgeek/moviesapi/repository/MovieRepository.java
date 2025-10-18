@@ -39,6 +39,26 @@ public class MovieRepository {
 		}
 	}
 
+	public Movie findById(int id) {
+		String query = "SELECT * FROM movies where id=?";
+		try {
+			PreparedStatement ps = this.db.getConnection().prepareStatement(query);
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				movie = new Movie();
+				movie.setId(rs.getInt("id"));
+				movie.setTitle(rs.getString("title"));
+				movie.setDirector(rs.getString("director"));
+				movie.setGenre(rs.getString("genre"));
+				return movie;
+			}
+
+		} catch (SQLException e) {
+			throw new RuntimeException("Error fecthing data", e);
+		}
+		return movie;
+	}
 	public Movie create(Movie movie) {
 		// Full texts id title director year genre
 		String query = "Insert into movies(title,director,year,genre) values (?,?,?,?)";

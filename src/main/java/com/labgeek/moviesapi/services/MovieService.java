@@ -16,6 +16,10 @@ public class MovieService {
 		return this.movieRepository.findAll();
 	}
 	
+	public Movie getMovieById(int id){
+		return this.movieRepository.findById(id);
+	}
+	
 	public Movie createMovie(Movie movie){
 
 		return this.movieRepository.create(movie);

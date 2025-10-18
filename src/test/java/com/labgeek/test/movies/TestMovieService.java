@@ -48,6 +48,15 @@ class TestMovieService {
 		assertEquals("Matrix",movieList.get(1).getTitle());
 
 	}
+	
+	@Test
+	void testShouldReturnMovieById() {
+		when(movieRepositoryMock.findById(1)).thenReturn(m2);
+		Movie movie=service.getMovieById(1);
+		assertEquals(1,movie.getId());
+		assertEquals("Matrix",movie.getTitle());
+
+	}
 
 	 @Test
 	    void testGetAllMoviesReturnsEmptyList() {

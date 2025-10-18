@@ -56,6 +56,38 @@ class MovieResourceTest {
 		assertEquals(200, response.getStatus());
 		assertNotNull(response.getEntity());
 	}
+	
+	@Test
+	void testGetMovieByReturnsOkResponse() throws Exception {
+		// Mock DB, repo, service
+		DataBaseConnection mockDb = mock(DataBaseConnection.class);
+		MovieRepository mockRepo = mock(MovieRepository.class);
+		MovieService mockService = mock(MovieService.class);
+
+		// Fake movie
+		Movie movie = new Movie();
+		movie.setId(1);
+		movie.setTitle("Matrix");
+		movie.setDirector("Zeus");
+		movie.setGenre("SC Fiction");
+
+
+		when(mockDb.getConnection()).thenReturn(null); 
+		when(mockRepo.findById(1)).thenReturn(movie);
+		when(mockService.getMovieById(1)).thenReturn(movie);
+
+		MovieResource resource = new MovieResource() {
+			@Override
+			public Response getMovieById(int id) {
+				return Response.ok(mockService.getMovieById(id)).build();
+			}
+		};
+
+		Response response = resource.getMovieById(1);
+
+		assertEquals(200, response.getStatus());
+		assertNotNull(response.getEntity());
+	}
 
 	@Test
 	void testGetAllMoviesReturnsServerErrorOnSQLException() throws Exception {

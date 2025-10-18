@@ -133,4 +133,30 @@ public class MovieResource {
             return Response.serverError().entity("Database failed").build();
         }
     }
+    @GET
+    @Path("/{id}")
+    @Operation(
+        summary = "Get movie by id",
+        description = "Retrieve a movie by id",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved movies"),
+            @ApiResponse(responseCode = "500", description = "Database error")
+        }
+    )
+	public Response getMovieById(@PathParam("id") int id) {
+    	 try {
+             DataBaseConnection db = DataBaseConnection.getInstance();
+             MovieRepository movieRepo = new MovieRepository(db);
+             MovieService service = new MovieService(movieRepo);
+             Movie movie = service.getMovieById(id);
+             if(movie!=null) {
+            	 
+            	 return Response.ok(movie).build();
+             }else {
+            	 return Response.status(Response.Status.NOT_FOUND).entity("{\"Message\":\"Movie not found\"}").build();
+             }
+         } catch (SQLException e) {
+             return Response.serverError().entity("Database failed").build();
+         }
+	}
 }
